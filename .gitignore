@@ -1,0 +1,42 @@
+﻿# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Local editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local backups - keep outside GitHub
+*.bak
+*.backup
+
+# Local test/build artifacts
+htmlcov/
+.coverage
+dist/
+build/
+
+# Local dependency audit snapshot
+requirements-audit-local.txt

@@ -1,0 +1,13 @@
+{
+    "model_name": "Calibrated Random Forest",
+    "target_column": "loan_status",
+    "positive_class": 1,
+    "decision_threshold": 0.55,
+    "calibration_method": "sigmoid",
+    "test_metrics": {
+        "ROC-AUC": 0.938843225462973,
+        "PR-AUC": 0.8939050308885402,
+        "Brier Score": 0.055181461208003865,
+        "Log Loss": 0.20372240591215063
+    }
+}

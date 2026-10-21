@@ -1,0 +1,12 @@
+﻿numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+shap
+joblib
+fastapi
+uvicorn[standard]
+pydantic
+pytest
+httpx

@@ -1,0 +1,430 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1220">
+    <title>CreditGuard AI | Credit Risk Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="#" aria-label="CreditGuard AI home">
+                <span class="brand-icon">C</span>
+                <span class="brand-copy">
+                    <strong>CreditGuard AI</strong>
+                    <small>RISK INTELLIGENCE</small>
+                </span>
+            </a>
+
+            <div class="nav-heading">WORKSPACE</div>
+            <nav class="navigation" aria-label="Main navigation">
+                <button class="nav-link active" data-page="dashboard">
+                    <span>&#9632;</span> Dashboard
+                </button>
+                <button class="nav-link" data-page="assessment">
+                    <span>&#43;</span> New Assessment
+                </button>
+                <button class="nav-link" data-page="insights">
+                    <span>&#9672;</span> Model Insights
+                </button>
+                <button class="nav-link" data-page="api">
+                    <span>&#9000;</span> API Status
+                </button>
+            </nav>
+
+            <div class="nav-heading system-heading">SYSTEM</div>
+            <nav class="navigation">
+                <button class="nav-link" data-page="about">
+                    <span class="nav-icon" aria-hidden="true">i</span> About Project
+                </button>
+            </nav>
+
+            <div class="sidebar-status">
+                <div class="status-line">
+                    <span class="status-dot" id="sidebarStatusDot"></span>
+                    <span id="sidebarApiStatus">Checking API...</span>
+                </div>
+                <p>Calibrated Random Forest<br>FastAPI &middot; Docker &middot; SHAP</p>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">&#9776;</button>
+                    <div class="breadcrumb">Workspace <span>/</span> <strong id="currentPageName">Dashboard</strong></div>
+                </div>
+                <div class="topbar-right">
+                    <div class="api-pill">
+                        <span class="status-dot" id="topStatusDot"></span>
+                        <span id="topApiStatus">Checking API</span>
+                    </div>
+                    <div class="avatar">CG</div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- DASHBOARD -->
+                <section class="page active" id="page-dashboard">
+                    <div class="page-heading">
+                        <div>
+                            <div class="eyebrow">CREDIT RISK INTELLIGENCE</div>
+                            <h1>Good morning, Analyst.</h1>
+                            <p class="page-description">A clear view of your credit risk model and assessment workspace.</p>
+                        </div>
+                        <button class="btn btn-primary" data-go="assessment">&#43; New assessment</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <article class="card stat-card">
+                            <div class="stat-label">Model ROC-AUC</div>
+                            <div class="stat-value">0.9388</div>
+                            <div class="stat-caption">Held-out test set</div>
+                        </article>
+                        <article class="card stat-card">
+                            <div class="stat-label">PR-AUC</div>
+                            <div class="stat-value">0.8939</div>
+                            <div class="stat-caption">Positive class: default</div>
+                        </article>
+                        <article class="card stat-card">
+                            <div class="stat-label">Brier Score</div>
+                            <div class="stat-value">0.0552</div>
+                            <div class="stat-caption">Lower is generally better</div>
+                        </article>
+                        <article class="card stat-card">
+                            <div class="stat-label">Decision Threshold</div>
+                            <div class="stat-value">55<span class="value-unit">%</span></div>
+                            <div class="stat-caption">Configured model threshold</div>
+                        </article>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <article class="card">
+                            <div class="card-heading">
+                                <div>
+                                    <h2>Model performance</h2>
+                                    <p>Saved held-out test metrics.</p>
+                                </div>
+                                <span class="tag tag-blue">TEST SET</span>
+                            </div>
+                            <div class="card-content">
+                                <canvas id="performanceChart" aria-label="Model performance chart"></canvas>
+                                <div class="chart-note">Metrics have different definitions; interpret them in context.</div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-heading">
+                                <div>
+                                    <h2>Decision threshold</h2>
+                                    <p>Classification uses the configured cutoff.</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="bar-group">
+                                    <div class="bar-label"><span>Class 0 &middot; Below threshold</span><strong>Under 55%</strong></div>
+                                    <div class="progress-track"><div class="progress-fill fill-green" style="width:55%"></div></div>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar-label"><span>Class 1 &middot; Threshold or above</span><strong>55%+</strong></div>
+                                    <div class="progress-track"><div class="progress-fill fill-red" style="width:45%"></div></div>
+                                </div>
+                                <div class="notice">This threshold is a model classification rule, not a universal lending standard. A lower-risk prediction does not guarantee repayment.</div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <article class="card table-card">
+                        <div class="card-heading">
+                            <div>
+                                <h2>Recent assessments</h2>
+                                <p>Predictions made during this browser session.</p>
+                            </div>
+                            <button class="btn btn-outline" data-go="assessment">Create assessment</button>
+                        </div>
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr><th>Assessment</th><th>Applicant profile</th><th>Probability</th><th>Class</th><th>Risk label</th></tr>
+                                </thead>
+                                <tbody id="recentAssessments">
+                                    <tr><td colspan="5" class="empty-row">No assessments yet. Create one to see it here.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- NEW ASSESSMENT -->
+                <section class="page" id="page-assessment">
+                    <div class="page-heading">
+                        <div>
+                            <div class="eyebrow">APPLICANT WORKSPACE</div>
+                            <h1>New credit assessment</h1>
+                            <p class="page-description">Enter a sample applicant profile and request a prediction from your live FastAPI model.</p>
+                        </div>
+                        <span class="tag tag-blue">LIVE MODEL</span>
+                    </div>
+
+                    <div class="assessment-layout">
+                        <form class="card assessment-form" id="assessmentForm">
+                            <div class="form-section-title">01 &middot; Applicant profile</div>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label for="person_age">Applicant age</label>
+                                    <input id="person_age" type="number" min="18" max="100" value="25" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="person_income">Annual income (USD)</label>
+                                    <input id="person_income" type="number" min="1" max="100000000" value="60000" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="person_home_ownership">Home ownership</label>
+                                    <select id="person_home_ownership">
+                                        <option>RENT</option><option>OWN</option><option>MORTGAGE</option><option>OTHER</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label for="person_emp_length">Employment length (years)</label>
+                                    <input id="person_emp_length" type="number" min="0" max="80" step="any" value="3">
+                                </div>
+                                <div class="form-field">
+                                    <label for="cb_person_cred_hist_length">Credit history (years)</label>
+                                    <input id="cb_person_cred_hist_length" type="number" min="0" max="100" value="4" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="cb_person_default_on_file">Prior default record</label>
+                                    <select id="cb_person_default_on_file">
+                                        <option value="N">No (N)</option><option value="Y">Yes (Y)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-section-title">02 &middot; Loan details</div>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label for="loan_amnt">Loan amount (USD)</label>
+                                    <input id="loan_amnt" type="number" min="1" max="1000000" value="8000" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="loan_int_rate">Interest rate (%)</label>
+                                    <input id="loan_int_rate" type="number" min="0" max="100" step="any" value="10.5">
+                                </div>
+                                <div class="form-field">
+                                    <label for="loan_intent">Loan purpose</label>
+                                    <select id="loan_intent">
+                                        <option>EDUCATION</option><option>PERSONAL</option><option>MEDICAL</option>
+                                        <option>VENTURE</option><option>HOMEIMPROVEMENT</option><option>DEBTCONSOLIDATION</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label for="loan_grade">Loan grade</label>
+                                    <select id="loan_grade">
+                                        <option>A</option><option selected>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label for="loan_percent_income">Loan / annual income</label>
+                                    <input id="loan_percent_income" type="number" min="0" max="1" step="any" value="0.13" required>
+                                    <small>Decimal between 0 and 1; for example, 0.13 means 13%.</small>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" id="predictButton" type="submit">Run risk assessment &#8594;</button>
+                                <button class="btn btn-outline" id="resetButton" type="reset">Reset form</button>
+                            </div>
+                        </form>
+
+                        <aside class="card workflow-card">
+                            <h2>Assessment workflow</h2>
+                            <p>Inputs are validated by FastAPI before the calibrated model returns an estimated default probability.</p>
+                            <div class="workflow-divider"></div>
+                            <div class="workflow-row"><span>Model</span><strong>Calibrated Random Forest</strong></div>
+                            <div class="workflow-row"><span>Threshold</span><strong id="thresholdValue">55%</strong></div>
+                            <div class="workflow-row"><span>Endpoint</span><strong>POST /predict</strong></div>
+                            <div class="workflow-row"><span>Backend</span><strong id="backendStatus">Checking...</strong></div>
+                            <div class="workflow-divider"></div>
+                            <p>Use sample data only. Do not enter real sensitive applicant information in this educational demo.</p>
+                        </aside>
+                    </div>
+                    <div id="predictionResult"></div>
+                </section>
+
+                <!-- MODEL INSIGHTS -->
+                <section class="page" id="page-insights">
+                    <div class="page-heading">
+                        <div><div class="eyebrow">MODEL TRANSPARENCY</div><h1>Model insights</h1><p class="page-description">Held-out test metrics and development-time global SHAP summaries.</p></div>
+                        <span class="tag tag-blue">MODEL CARD</span>
+                    </div>
+                    <div class="stats-grid">
+                        <article class="card stat-card"><div class="stat-label">ROC-AUC</div><div class="stat-value">0.9388</div><div class="stat-caption">Higher is generally better</div></article>
+                        <article class="card stat-card"><div class="stat-label">PR-AUC</div><div class="stat-value">0.8939</div><div class="stat-caption">Default is positive class</div></article>
+                        <article class="card stat-card"><div class="stat-label">Brier Score</div><div class="stat-value">0.0552</div><div class="stat-caption">Lower is generally better</div></article>
+                        <article class="card stat-card"><div class="stat-label">Log Loss</div><div class="stat-value">0.2037</div><div class="stat-caption">Lower is generally better</div></article>
+                    </div>
+                    <div class="insights-grid">
+                        <article class="card">
+                            <div class="card-heading"><div><h2>Global SHAP feature importance</h2><p>Mean absolute SHAP values measured on a validation sample.</p></div></div>
+                            <div class="card-content">
+                                <div class="feature-row"><span>Loan / income</span><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div><strong>0.0837</strong></div>
+                                <div class="feature-row"><span>Annual income</span><div class="progress-track"><div class="progress-fill" style="width:72.5%"></div></div><strong>0.0607</strong></div>
+                                <div class="feature-row"><span>Home: RENT</span><div class="progress-track"><div class="progress-fill" style="width:48.5%"></div></div><strong>0.0406</strong></div>
+                                <div class="feature-row"><span>Loan grade A</span><div class="progress-track"><div class="progress-fill" style="width:34.9%"></div></div><strong>0.0292</strong></div>
+                                <div class="feature-row"><span>Loan grade D</span><div class="progress-track"><div class="progress-fill" style="width:31.8%"></div></div><strong>0.0266</strong></div>
+                                <div class="feature-row"><span>Interest rate</span><div class="progress-track"><div class="progress-fill" style="width:29.3%"></div></div><strong>0.0245</strong></div>
+                                <div class="feature-row"><span>Loan grade C</span><div class="progress-track"><div class="progress-fill" style="width:25.3%"></div></div><strong>0.0212</strong></div>
+                            </div>
+                        </article>
+                        <article class="card">
+                            <div class="card-heading"><div><h2>Responsible interpretation</h2><p>Important limitations of model explanations.</p></div></div>
+                            <div class="card-content">
+                                <div class="notice"><strong>How to read these values:</strong> Higher mean absolute SHAP values indicate greater average influence on model output in the evaluated sample. They do not show whether a feature raises or lowers risk, and they do not establish causation.</div>
+                                <div class="notice">Test metrics summarize a held-out evaluation; real-world performance can differ due to population shift and data quality.</div>
+                                <div class="notice">Before real use, evaluate fairness, subgroup calibration, data protection, drift, governance, and applicable regulations.</div>
+                            </div>
+                        </article>
+                    </div>
+                    <p class="page-description">These are saved development-time SHAP summaries. This UI does not calculate per-applicant SHAP values.</p>
+                </section>
+
+                <!-- API STATUS -->
+                <section class="page" id="page-api">
+                    <div class="page-heading">
+                        <div><div class="eyebrow">CONNECTIVITY</div><h1>API status</h1><p class="page-description">Check whether FastAPI and the trained model are available to this browser.</p></div>
+                        <button class="btn btn-outline" id="refreshApiButton">&#8635; Refresh status</button>
+                    </div>
+                    <article class="card api-status-card">
+                        <div><h2 id="apiStatusTitle">Checking backend...</h2><p id="apiStatusDescription">Requesting GET /health.</p></div>
+                        <span class="tag tag-blue" id="apiStatusBadge">CHECKING</span>
+                    </article>
+                    <article class="card api-settings-card">
+                        <div class="card-heading"><div><h2>Connection settings</h2><p>Local Docker API defaults to port 8000.</p></div></div>
+                        <div class="card-content">
+                            <div class="form-field api-url-field">
+                                <label for="apiBaseUrl">API base URL</label>
+                                <input id="apiBaseUrl" type="url" value="http://127.0.0.1:8000">
+                                <small>If frontend and backend have different origins, configure FastAPI CORS for this frontend origin.</small>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" id="saveApiUrlButton">Save URL & check</button>
+                                <button class="btn btn-outline" id="testPredictionButton">Test prediction endpoint</button>
+                            </div>
+                            <p id="apiTestResult" class="api-test-result"></p>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- ABOUT -->
+                <section class="page" id="page-about">
+                    <div class="page-heading"><div><div class="eyebrow">PROJECT OVERVIEW</div><h1>About CreditGuard AI</h1><p class="page-description">Educational end-to-end machine learning for credit default risk estimation.</p></div></div>
+                    <div class="about-grid">
+                        <article class="card">
+                            <div class="card-heading"><div><h2>Technology stack</h2><p>Components powering this project.</p></div></div>
+                            <div class="card-content">
+                                <div class="workflow-row"><span>Model</span><strong>Calibrated Random Forest</strong></div>
+                                <div class="workflow-row"><span>API</span><strong>FastAPI + Pydantic</strong></div>
+                                <div class="workflow-row"><span>Explainability</span><strong>SHAP</strong></div>
+                                <div class="workflow-row"><span>Containerization</span><strong>Docker + WSL2</strong></div>
+                                <div class="workflow-row"><span>Frontend</span><strong>HTML &middot; CSS &middot; JavaScript</strong></div>
+                            </div>
+                        </article>
+                        <article class="card">
+                            <div class="card-heading"><div><h2>Model disclaimer</h2><p>Use responsibly.</p></div></div>
+                            <div class="card-content"><div class="notice">Educational demonstration only. This is not a standalone lending decision tool. Predictions may be inaccurate or biased and must not be the sole basis for decisions affecting individuals. Do not enter real sensitive applicant data.</div></div>
+                        </article>
+                    </div>
+
+                    <section class="about-section" id="about-workflow">
+                        <div class="section-intro">
+                            <div>
+                                <div class="eyebrow">HOW IT WORKS</div>
+                                <h2>From applicant data to risk estimate</h2>
+                                <p>Understand the main stages behind a CreditGuard AI assessment.</p>
+                            </div>
+                        </div>
+
+                        <div class="about-workflow-grid">
+                            <article class="about-step">
+                                <span class="about-step-number">01</span>
+                                <h3>Applicant details</h3>
+                                <p>Enter the requested financial and loan-related features in the assessment form.</p>
+                            </article>
+                            <article class="about-step">
+                                <span class="about-step-number">02</span>
+                                <h3>Model inference</h3>
+                                <p>The API validates the input and passes supported features to the calibrated model.</p>
+                            </article>
+                            <article class="about-step">
+                                <span class="about-step-number">03</span>
+                                <h3>Risk estimate</h3>
+                                <p>The model returns an estimated default probability for the supplied profile.</p>
+                            </article>
+                            <article class="about-step">
+                                <span class="about-step-number">04</span>
+                                <h3>Threshold comparison</h3>
+                                <p>The probability is compared with the configured 0.55 threshold to produce the demo classification.</p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="about-section" id="about-metrics">
+                        <div class="section-intro">
+                            <div>
+                                <div class="eyebrow">HELD-OUT TEST RESULTS</div>
+                                <h2>Model performance at a glance</h2>
+                                <p>Saved evaluation metrics for the current calibrated Random Forest model.</p>
+                            </div>
+                            <span class="about-result-tag">TEST SET</span>
+                        </div>
+
+                        <div class="about-metrics-grid">
+                            <article class="about-metric-card">
+                                <span>ROC-AUC</span>
+                                <strong>0.9388</strong>
+                                <p>Measures how well the model ranks positive cases above negative cases.</p>
+                            </article>
+                            <article class="about-metric-card">
+                                <span>PR-AUC</span>
+                                <strong>0.8939</strong>
+                                <p>Summarizes precision and recall across classification thresholds.</p>
+                            </article>
+                            <article class="about-metric-card">
+                                <span>Brier Score</span>
+                                <strong>0.0552</strong>
+                                <p>Measures squared error in predicted probabilities; lower is generally better.</p>
+                            </article>
+                            <article class="about-metric-card">
+                                <span>Log Loss</span>
+                                <strong>0.2037</strong>
+                                <p>Penalizes inaccurate probability estimates, especially confident errors; lower is better.</p>
+                            </article>
+                        </div>
+                        <p class="about-footnote">Metrics describe this evaluation dataset and do not guarantee performance on new applicants.</p>
+                    </section>
+
+                    <section class="about-section about-responsible-card" id="about-responsible">
+                        <div class="about-responsible-icon" aria-hidden="true">!</div>
+                        <div>
+                            <div class="eyebrow">RESPONSIBLE AI</div>
+                            <h2>Use predictions with care</h2>
+                            <p>This project is an educational demonstration, not a production lending system. Model predictions can be inaccurate, biased, or unsuitable for a different population.</p>
+                            <ul>
+                                <li>Do not use a prediction as the sole basis for a lending decision.</li>
+                                <li>SHAP can help inspect feature contributions, but does not prove fairness or causality.</li>
+                                <li>Use synthetic or non-sensitive example data in demonstrations.</li>
+                                <li>Real-world deployment requires validation, privacy safeguards, fairness testing, monitoring, and human oversight.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+
+                <footer class="footer">CreditGuard AI &middot; Educational credit-risk analytics &middot; No guarantee of future default.</footer>
+            </div>
+        </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+</body>
+</html>
