@@ -4,7 +4,7 @@
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-    let apiBaseUrl = "http://127.0.0.1:8000";
+    let apiBaseUrl = "https://credit-risk-ml-system-z0f4.onrender.com";
     let assessments = [];
     let toastTimer = null;
 
